@@ -1,0 +1,24 @@
+<launch>
+  <arg name="razor_config_file" default="$(find razor_imu_9dof)/config/my_razor.yaml"/>
+  <node pkg="razor_imu_9dof" type="imu_node.py" name="imu_node" output="screen">
+    <rosparam file="$(arg razor_config_file)" command="load"/>
+  </node>
+
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find sick_tim)/urdf/example.urdf.xacro'" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+
+  <node name="sick_tim571_2050101" pkg="sick_tim" type="sick_tim551_2050001" respawn="false" output="screen">
+    <param name="range_max" type="double" value="25.0" />
+
+    <!-- Uncomment this to enable TCP instead of USB connection; 'hostname' is the host name or IP address of the laser scanner
+    In cases where a race condition exists and the computer boots up before the TIM is ready, increase 'timelimit.'
+	-->
+         <param name="hostname" type="string" value="169.254.245.3" />
+         <param name="port" type="string" value="2112" />
+         <param name="timelimit" type="int" value="5" />
+    
+  </node>
+
+  <node pkg="uwb" type="uwb_keeper_node.py" name="uwb_keeper_node" output="screen">
+  </node>
+</launch>

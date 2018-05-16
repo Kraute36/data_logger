@@ -1,0 +1,4 @@
+<launch>
+  <node pkg="uwb" type="uwb_node.py" name="uwb_node" output="screen">
+  </node>
+</launch>
